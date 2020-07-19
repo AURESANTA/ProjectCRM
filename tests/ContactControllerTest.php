@@ -18,96 +18,30 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
-/**
- * Class ContactController
- * @package App\Controller
- * @Route("/contact",name="contact_")
- */
-class ContactController extends AbstractController
+final class ContactControllerTest extends TestCase
 {
+    private $contact;
 
-    private $groupRepository;
-    private $entityManager;
-
-
-    public function __construct(EntityManagerInterface $entityManager, ContactRepository $contactRepository)
+    public function setUp():void
     {
-    $this->contactRepository = $contactRepository;
-    $this->entityManager = $entityManager;
-
+        $this->test = new Contact();
+        $this->test->newContact('testFirstName', 'testLastName', 'testValide@gmail.com', '06.06.06.06.06', 'Commercial');
+        $this->empty = new Contact();
+        $this->empty->newContact('', '', '', '', '');
+        $this->testInvalid = new Contact();
+        $this->testInvalid->newContact('invalide', 'invalide', 'test@gmail', '06XX', 'Commercial');
     }
-    /**
-     * @Route("/list", name="list")
-     */
-    public function index()
-    {
-        $contacts = $this->contactRepository->findAll();
-        return $this->render('contact/index.html.twig', [
-            'contacts' => $contacts,
-        ]);
+    
+    public function testPhoneFormat(){
+        $this->assertIsString($this->test->getPhone());
     }
 
-/**
-     * @Route("/new",name="new")
-     */
-    public function newContact (Request $request)
-
-    {
-
-        $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-
-
-            $this->entityManager->persist($contact);
-            $this->entityManager->flush();
-
-            $this->addFlash('success', "Le contact a été ajouté !");
-
-            return $this->redirectToRoute('contact_list');
-        }
-
-        return $this->render('contact/form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-
+    public function testValidPhone(){
+        $this->assertFalse($this->test->verifPhone($this->test->getPhone()));
     }
 
-    /**
-     * @Route("/update/{id}", name="update")
-     */
-
-    public function updateContact (Contact $contact, Request $request)
-
-    {
-        $form = $this->createForm(ContactType::class, $contact);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
-
-            $this->entityManager->persist($contact);
-            $this->entityManager->flush();
-
-            $this->addFlash('success', "Le contact a bien été modifié !");
-
-            return $this->redirectToRoute('contact_list');
-        }
-
-        return $this->render('contact/form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/delete/{id}", name="delete")
-     */
-
-    public function deleteContact (Contact $contact, Request $request)
-    {
-        $this->entityManager->remove($contact);
-        $this->entityManager->flush();
-        $this->addFlash('success', "Le contact a bien été supprimé !");
-        return $this->redirectToRoute('contact_list');
+    public function testInvalidPhone(){
+        $this->assertFalse($this->testInvalid->verifPhone($this->testInvalid->getPhone()));
     }
 
 }
