@@ -19,8 +19,8 @@
     {% for tag in tags %}
         <li>
         <p>{{ tag.name }}</p>
-        <a href="{{ path('contact_delete',{'id': tag.id}) }}">Supprimer</a>
-        <a href="{{ path('contact_update',{'id':tag.id}) }}">Modifier</a>
+        <a href="{{ path('tag_delete',{'id': tag.id}) }}">Supprimer</a>
+        <a href="{{ path('tag_update',{'id':tag.id}) }}">Modifier</a>
 
         </li>
         {% endfor %}

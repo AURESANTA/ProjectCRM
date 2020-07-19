@@ -74,22 +74,22 @@ class TagController extends AbstractController
      * @Route("/update/{id}", name="update")
      */
 
-    public function updateContact (Contact $contact, Request $request)
+    public function updateContact (Tag $tag, Request $request)
 
     {
-        $form = $this->createForm(ContactType::class, $contact);
+        $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
 
-            $this->entityManager->persist($contact);
+            $this->entityManager->persist($tag);
             $this->entityManager->flush();
 
-            $this->addFlash('success', "Le contact a bien été modifié !");
+            $this->addFlash('success', "La catégorie a bien été modifiée !");
 
-            return $this->redirectToRoute('contact_list');
+            return $this->redirectToRoute('tag_list');
         }
 
-        return $this->render('contact/form.html.twig', [
+        return $this->render('tag/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -98,12 +98,12 @@ class TagController extends AbstractController
      * @Route("/delete/{id}", name="delete")
      */
 
-    public function deleteContact (Contact $contact, Request $request)
+    public function deleteContact (Tag $tag, Request $request)
     {
-        $this->entityManager->remove($contact);
+        $this->entityManager->remove($tag);
         $this->entityManager->flush();
-        $this->addFlash('success', "Le contact a bien été supprimé !");
-        return $this->redirectToRoute('contact_list');
+        $this->addFlash('success', "La catégorie a bien été supprimée !");
+        return $this->redirectToRoute('tag_list');
     }
 
 }
