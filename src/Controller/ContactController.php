@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Form\ContactType;
 use App\Entity\Contact;
 use App\Entity\Tag;
 use App\Repository\ContactRepository;
 use App\Repository\TagRepository;
+
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

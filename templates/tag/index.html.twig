@@ -1,20 +1,29 @@
-{% extends 'base.html.twig' %}
+{% include 'nav.html.twig' %}
 
-{% block title %}Hello TagController!{% endblock %}
+
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; list-style-type: none;}
+    .example-wrapper ul { list-style-type: none; }
+    .example-wrapper li { background: #F5F5F5; padding: 2px 6px; border: 1px solid black; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<h1>Liste des catégories de contact</h1>
 
-    This friendly message is coming from:
+  <div class="example-wrapper">
+
+  <p><a href="{{ path('tag_new') }}">Ajouter une catégorie</a></p>
+  
     <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/project/src/Controller/TagController.php'|file_link(0) }}">src/Controller/TagController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/project/templates/tag/index.html.twig'|file_link(0) }}">templates/tag/index.html.twig</a></code></li>
+    {% for tag in tags %}
+        <li>
+        <p>{{ tag.name }}</p>
+        <a href="{{ path('contact_delete',{'id': tag.id}) }}">Supprimer</a>
+        <a href="{{ path('contact_update',{'id':tag.id}) }}">Modifier</a>
+
+        </li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}
